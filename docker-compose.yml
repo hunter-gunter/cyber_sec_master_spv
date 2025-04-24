@@ -30,12 +30,13 @@ services:
       ANOMALY_INBOUND: "10"
       ANOMALY_OUTBOUND: "5"
       ALLOWED_METHODS: GET POST PUT HEAD
-      ALLOWED_REQUEST_CONTENT_TYPE: text/xml|application/xml|text/plain
+      ALLOWED_REQUEST_CONTENT_TYPE: text/xml|application/xml|text/plain|application/x-www-form-urlencoded
       VALIDATE_UTF8_ENCODING: "1"
       COMBINED_FILE_SIZES: "1000000"
     volumes:
       - ./apache/custom-ratelimit.conf:/etc/modsecurity.d/custom-ratelimit.conf:ro
       - ./apache/logs:/var/log/apache2/
+      - ./apache/REQUEST-900-EXCLUSION-WP-LOGIN.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-900-EXCLUSION-WP-LOGIN.conf:ro
       - ./apache/modsec_audit.log:/var/log/modsec_audit.log
       - ./apache/modsec_error.log:/var/log/modsec_error.log
     networks:
@@ -116,7 +117,7 @@ services:
     networks:
       - web
     volumes:
-      - "./script:/script"
+      - "./scripts:/scripts"
  
 networks:
   web:

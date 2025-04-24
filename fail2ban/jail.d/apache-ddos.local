@@ -4,7 +4,7 @@ filter   = apache-ddos
 # lit tous les access.log d'Apache
 logpath  = /var/log/apache2/access.log*
 # 100 requêtes dans 1 seconde déclenchent le ban
-maxretry = 100
+maxretry = 20
 findtime = 1
 bantime  = 60
 action   = docker-user
