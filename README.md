@@ -38,9 +38,9 @@ En informatique, la répartition de charge (en anglais : load balancing) désign
 | Domaine | Composants / Outils | Rôle principal |
 | --- | --- | --- |
 | **Architecture de base** | **Docker Compose** | Orchestration des conteneurs et réseau interne |
-|  | **Nginx (LB)** | Répartition du trafic HTTP/HTTPS vers les backends |
+|  | **Nginx (LB)** | Répartition du trafic HTTP/HTTPS vers vos applications |
 |  | **Conteneurs is “Load Balancer Targets” with dyn conf**  | Surface d’attaque pour scénarios de pentest |
-|  | **Scripts d’automatisation** (Bash/Ansible) | Déploiement « one-shot », scale, teardown |
+|  | **Scripts d’automatisation** (Bash/Ansible) | Déploiement, scale |
 | **Workflows automatisés** | **Pipeline CI/CD** | Build, lint, déploiement d’environnements IaC |
 |  | **Tests de sécurité** (OWASP ZAP, Trivy, scripts custom) | Scans SAST/DAST, exploitation automatique |
 |  | **Collecte & analyse** (Prometheus, Grafana, Loki) | Agrégation logs/metrics, tableaux de bord, alertes |
