@@ -33,6 +33,12 @@ En informatique, la répartition de charge (en anglais : load balancing) désign
 | **IP Hash / Consistent Hash** | L7 | Hachage IP / cookie ⇒ même nœud | Perte d'un nœud → re-hash massif, perte de session | Faible |
 | **EWMA / Dynamic-RR (HAProxy)** | L7 | Pondère selon latence récente | Réallocation automatique ; absorbe flash-crowd | Plus élevé |
 
+### Lab: scenario d'attaque en environement encadrer
+
+Nous avons donc mis en place un scénario reflète notre environnement de production : un serveur Nginx utilisé comme load balancer pour les réplicas de notre application. Juste à côté, un service Fail2Ban surveille en quasi temps réel les logs générés, constituant ainsi une première ligne de défense contre les menaces potentielles. [IAC Infra](./docker-compose.yml)
+
+<img src="assets/infra.png" style="width:100%" >
+
 ## Votre environnement
 
 | Domaine | Composants / Outils | Rôle principal |
