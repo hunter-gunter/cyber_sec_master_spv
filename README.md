@@ -25,7 +25,8 @@ En informatique, la répartition de charge (en anglais : load balancing) désign
 | **Least Connections** | L4 / L7 | Envoie au serveur le moins connecté | Connexions idle → "fantômes" | Moyen |
 | **Weighted Least Connections** | L4 / L7 | LC pondéré par capacité | Poids mal ajustés → biais | Moyen | 
 | **IP Hash / Consistent Hash** | L7 | Hachage IP / cookie ⇒ même nœud | Perte d'un nœud → re-hash massif, perte de session | Faible |
-| **EWMA / Dynamic-RR (HAProxy)** | L7 | Pondère selon latence récente | Réallocation automatique ; absorbe flash-crowd | Plus élevé |
+
+<p style="width:100%;text-align: center"><a href="./nginx/Readme.md">Voir des examples de configuration</a></p>
 
 ### Lab: scenario d'attaque en environement encadrer
 
