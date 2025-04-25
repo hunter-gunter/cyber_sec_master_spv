@@ -10,12 +10,6 @@ Standardiser et automatiser les tests de sécurité, tout en favorisant la colla
 ## Introduction 
 Cette section avancée vise à apprendre aux experts en cybersécurité à évaluer rapidement un environnement **Docker** avec **équilibrage de charge** du point de vue de la sécurité. Il s’agit d’identifier et documenter les vulnérabilités de l’infrastructure, d’associer les failles à des références (CVE, CWE) et de mettre en pratique des exploits connus. L’objectif est de démontrer la capacité à réaliser une **analyse de vulnérabilités** rapide et efficace, en utilisant des outils de pentest (ex: **Nmap**, **Metasploit**, etc.) et en s’appuyant sur des cas concrets. 
 
-# Infrastructure as Code: Environnement collaboratif pour Tests de Sécurité
-
-## Introduction
-
-L'approche Infrastructure as Code (IaC) change notre la façon dont nous conduisons les tests de sécurité. En définissant des environnements Docker reproductibles, nous créons une plateforme collaborative où chaque expert peut contribuer en ajoutant ses propres scénarios de test et workflows d'exploitation.
-
 ## Conception de l'environnement IaC
 
 ### Load Balancer
