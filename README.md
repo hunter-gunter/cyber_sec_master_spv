@@ -119,8 +119,6 @@ Exemple: les objectifs, différents selon chaque sujet, seront enrichis progress
 | A-RR-01 | Round Robin | rr_flood.sh | 20 000 req/s GET /?slow=1 | Montrer qu’un seul nœud sature → erreurs 5xx | ⏳ |
 | A-WRR-02 | Weighted RR | weight_bias.sh | Ratio trafic 1:1 malgré weight 5:1 | Vérifier qu’un mauvais poids crée le déséquilibre | ⏳ |
 | A-LC-03 | Least Conn. | long_websocket.py | 500 connexions WebSocket longues | Encombrer un nœud ; observer la bascule | ⏳ |
-| A-EWMA-04 | EWMA | latency_spike.sh | Latence variable (tc qdisc) | Observer la réallocation auto vers les nœuds rapides | ⏳ |
-
 
 ## Identification des vulnérabilités de l’environnement 
 Avant toute exploitation, un expert doit **cartographier** les composants du système Docker et du load balancer, puis identifier les vulnérabilités potentielles. Voici les étapes recommandées :
