@@ -120,6 +120,30 @@ Exemple: les objectifs, différents selon chaque sujet, seront enrichis progress
 | A-WRR-02 | Weighted RR | weight_bias.sh | Ratio trafic 1:1 malgré weight 5:1 | Vérifier qu’un mauvais poids crée le déséquilibre | ⏳ |
 | A-LC-03 | Least Conn. | long_websocket.py | 500 connexions WebSocket longues | Encombrer un nœud ; observer la bascule | ⏳ |
 
+## Contribution de Scénarios de Test
+
+Cette section est enrichie progressivement par les collaborateurs du projet. Chaque nouveau scénario doit inclure :
+
+- Une description détaillée du workflow
+- Les prérequis techniques
+- Les objectifs de sécurité visés
+- Les métriques de succès
+
+<aside>
+Pour ajouter un nouveau scénario, créez un fork git et suivez le template de documentation fourni dans /docs/Scenarios.md
+
+</aside>
+
+- Exemple de contribution
+
+    Workflow : Détection d'injection SQL via proxy inversé
+
+    - Auteur : @pentester_alice
+    - Date : 2025-04-20
+    - Description : Test automatisé d'injections SQL à travers un load balancer
+    - Fichiers : /scenarios/sql-injection-lb/
+
+
 ## Identification des vulnérabilités de l’environnement 
 Avant toute exploitation, un expert doit **cartographier** les composants du système Docker et du load balancer, puis identifier les vulnérabilités potentielles. Voici les étapes recommandées :
 
@@ -190,25 +214,3 @@ Pour approfondir cette thématique de sécurité des conteneurs et de l’équil
 
 En synthèse, cette section avancée donnera aux apprenants une **méthodologie d’audit de sécurité** pour les infrastructures Docker avec load balancing, ainsi que les outils et références pour rester à jour sur les menaces. La combinaison de notions théoriques (CVE/CWE) et de **mises en pratique concrètes** assurera qu’à l’issue, les experts sauront identifier rapidement les points faibles d’un tel environnement et démontrer, exploits à l’appui, l’importance de les sécuriser.
 
-## Contribution de Scénarios de Test
-
-Cette section est enrichie progressivement par les collaborateurs du projet. Chaque nouveau scénario doit inclure :
-
-- Une description détaillée du workflow
-- Les prérequis techniques
-- Les objectifs de sécurité visés
-- Les métriques de succès
-
-<aside>
-Pour ajouter un nouveau scénario, créez une branche git et suivez le template de documentation fourni dans /docs/scenarios/
-
-</aside>
-
-- Exemple de contribution
-
-    Workflow : Détection d'injection SQL via proxy inversé
-
-    - Auteur : @pentester_alice
-    - Date : 2025-04-20
-    - Description : Test automatisé d'injections SQL à travers un load balancer
-    - Fichiers : /scenarios/sql-injection-lb/
