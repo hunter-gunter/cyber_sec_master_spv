@@ -1,6 +1,8 @@
-# Cours Pentest Docker Dynamique : Sécurisation et Exploitation Avancées
+# Dynamique Pentest on LB target with docker : Sécurisation et Exploitation Avancées
+
 ## Context
-Ce module de cybersécurité se déroule dans un laboratoire Docker équipé d’un load balancer. À travers une série de scénarios d’attaque réalistes, les apprenants doivent identifier les menaces, configurer les défenses appropriées et valider leur efficacité.
+
+Ce module de cybersécurité se déroule dans un laboratoire Docker équipé d’un load balancer. À travers une série de scénarios d’attaque réalistes, les apprenants doivent identifier les menaces ou configurer les défenses appropriées et valider leur efficacité.
 L’objectif pédagogique est double :
 
 Optimiser la productivité en cybersécurité grâce à des environnements logiques, dynamiques et entièrement reproductibles (Infrastructure as Code).
@@ -8,6 +10,7 @@ Optimiser la productivité en cybersécurité grâce à des environnements logiq
 Standardiser et automatiser les tests de sécurité, tout en favorisant la collaboration : chaque expert peut ajouter ses propres workflows et partager ses bonnes pratiques via un dépôt Git commun.
 
 ## Introduction 
+
 Cette section avancée vise à apprendre aux experts en cybersécurité à évaluer rapidement un environnement **Docker** avec **équilibrage de charge** du point de vue de la sécurité. Il s’agit d’identifier et documenter les vulnérabilités de l’infrastructure, d’associer les failles à des références (CVE, CWE) et de mettre en pratique des exploits connus. L’objectif est de démontrer la capacité à réaliser une **analyse de vulnérabilités** rapide et efficace, en utilisant des outils de pentest (ex: **Nmap**, **Metasploit**, etc.) et en s’appuyant sur des cas concrets. 
 
 ## Conception de l'environnement IaC
@@ -211,3 +214,56 @@ Pour ajouter un nouveau scénario, créez une branche git et suivez le template 
     - Date : 2025-04-20
     - Description : Test automatisé d'injections SQL à travers un load balancer
     - Fichiers : /scenarios/sql-injection-lb/
+<<<<<<< Updated upstream
+=======
+
+## Bibliothèque d'Exploits Collaborative
+
+Les scripts et outils d'exploitation sont maintenus collectivement par l'équipe. Votre a realiser sur une cible LB sur l'algo de votre choix (least connection, ....). Pour contribuer :
+
+- Processus de contribution
+    - Forker le dépôt principal
+    - Ajouter votre exploit dans ./scripts/exploits/
+    - Choisir un algorithme de loadbalancing a exploiter
+    - Faites une analyse cyber sur les cve/vwe et exploit lié a votre cible (LB RR: CVE ...) 
+    - Trouver un scenario qui vous convient et concretisez le techniquement 
+    - Documenter votre ou vos scenario
+    - Créer une pull request
+- Standards de qualité
+    - Tests unitaires requis
+    - Documentation complète
+    - Respect des bonnes pratiques
+
+## Amélioration continue
+
+- Feedback et itération
+
+    Le système permet de :
+
+    - Collecter des métriques sur les tests
+    - Identifier les goulots d'étranglement
+    - Optimiser les workflows
+    - Intégrer de nouveaux scénarios
+- Documentation et partage
+    - Création de templates réutilisables
+    - Base de connaissances des exploits
+    - Bibliothèque de workflows
+
+## Ressources et outils
+
+- Infrastructure
+    - Docker et Docker Compose
+    - Ansible pour le provisionnement
+    - GitLab CI pour l'automatisation
+- Sécurité
+    - Metasploit Framework
+    - Scripts d'exploitation personnalisés
+    - Outils d'analyse automatisée
+
+## Vocabulaire
+
+- Socket
+- Cluster
+- Isolation
+
+>>>>>>> Stashed changes

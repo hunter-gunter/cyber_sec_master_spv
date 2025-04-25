@@ -1,12 +1,29 @@
 name: observability-on-loadbalancer
 
 services:
+  ###########################################
+  ## Web dataviz compute logs in real time ##
+
+  grafana:
+    image: grafana/grafana 
+    container_name: grafana
+    volumes:
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    ports:
+      - 3000:3000
+    environment:
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/cadavisor.json
+
+  ########################################
+  ############ Logs Gateway ########
+
   prometheus:
     image: prom/prometheus:v2.52.0           # latest stable as of 2025-04-24
     container_name: prometheus
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
       - prom_data:/prometheus                # long-term storage
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -15,35 +32,71 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - node-exporter
+      - exporter
       - alertmanager
     networks:
       - observability
 
-  node-exporter:
-    image: quay.io/prometheus/node-exporter:v1.8.1
-    container_name: node-exporter
-    pid: host                                 # lets it read /proc from the host
-    network_mode: host                        # so it reports real host IP
-    restart: unless-stopped
-    command:
-      - '--path.rootfs=/host'                 # needed because of host PID namespace
-    volumes:
-      - '/:/host:ro,rslave'                   # read-only bind mount of host FS
+  ########################################
+  ############ Alert Event Listener ########
 
   alertmanager:
     image: prom/alertmanager:v0.27.0
     container_name: alertmanager
     volumes:
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./monitoring/alertmanager:/etc/alertmanager:ro
       - am_data:/alertmanager
     command:
       - "--config.file=/etc/alertmanager/alertmanager.yml"
       - "--storage.path=/alertmanager"
-    ports:
-      - "9093:9093"
+    expose:
+      - 9093
     networks:
       - observability
+
+  ########################################
+  ############ Monitor Resources ########
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: monitoring_cadvisor
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /sys/fs/cgroup:/cgroup:ro
+      - /dev/disk/:/dev/disk:ro
+    command:
+      - '-housekeeping_interval=10s'
+      - '-docker_only=true'
+    networks:
+      - observability
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    expose:
+      - 8080
+
+  exporter:
+    image: quay.io/prometheus/node-exporter:v1.8.1
+    container_name: exporter
+    hostname: exporter
+    pid: host
+    networks:
+      - observability                              # lets it read /proc from the host
+    volumes:
+      - '/:/host:ro,rslave'                # read-only bind mount of host FS
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: 
+      - '--path.rootfs=/host' # needed because of host PID namespace
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
 
 volumes:
   prom_data:
@@ -52,3 +105,7 @@ volumes:
 networks:
   observability:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.60.0/24
+          gateway: 172.100.60.1
