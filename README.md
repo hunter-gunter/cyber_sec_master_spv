@@ -98,21 +98,21 @@ Pour cela, créez :
 
 ---
 
-## Votre environnement
+## Votre environnement de travail
 
 | Domaine | Composants / Outils | Rôle principal |
 | --- | --- | --- |
 | **Architecture de base** | **Docker Compose** | Orchestration des conteneurs et réseau interne |
 |  | **Nginx (LB)** | Répartition du trafic HTTP/HTTPS vers vos applications |
-|  | **Conteneurs is “Load Balancer Targets” with dyn conf**  | Surface d’attaque pour scénarios de pentest |
+|  | **Attacker (kali)**  | Surface d’attaque pour scénarios de pentest |
 |  | **Scripts d’automatisation** (Bash/Ansible) | Déploiement, scale |
 | **Workflows automatisés** | **Pipeline CI/CD** | Build, lint, déploiement d’environnements IaC |
 |  | **Tests de sécurité** (OWASP ZAP, Trivy, scripts custom) | Scans SAST/DAST, exploitation automatique |
-|  | **Collecte & analyse** (Prometheus, Grafana, Loki) | Agrégation logs/metrics, tableaux de bord, alertes |
+|  | **Collecte & analyse** (Prometheus, Grafana, ...) | Agrégation logs/metrics, tableaux de bord, alertes |
 
-## Attaques automatisées
+## Exemple d'attaques automatisées
 
-Exemple: les objectifs, différents selon chaque sujet, seront enrichis progressivement par les contributeurs.
+Les scénarios d'attaque devront ere documenter telquels, selon l'exploit trouver.
 
 | ID | Algorithme visé | Script (/attacks/) | Payload | Objectif | État |
 | --- | --- | --- | --- | --- | --- |
