@@ -98,6 +98,19 @@ Pour cela, créez :
 
 ---
 
+####  Workflow
+
+Un scénario (ou workflow) d’escalade est une suite d’actions ordonnées qui font passer une cible (équipement, service, utilisateur…) 
+d’un état initial contrôlé vers un état final où vos privilèges ou vos capacités d’action ont augmenté.
+
+```bash
+(nologin) ──► exploit ──► user1
+               │
+               └─► nologin
+```
+
+---
+
 ## Votre environnement de travail
 
 | Domaine | Composants / Outils | Rôle principal |
