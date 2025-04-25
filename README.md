@@ -33,6 +33,67 @@ Nous avons donc mis en place un scénario reflète notre environnement de produc
 
 <img src="assets/infra.png" style="width:100%" >
 
+### Exploit Toolbox et scenario
+
+Objectif : mettre en place un banc d’essai pour analyser les attaques contre les algorithmes de répartition de charge (load-balancers).
+Vous devrez démontrer au moins un exploit ciblant un LB configuré avec l’algorithme de votre choix (least-connection, round-robin, etc.).
+Utilisez de préférence des environnements d’exploitation connus et facilement reproductibles.
+La notation portera avant tout sur votre démarche méthodologique
+
+---
+
+#### 1. Comment contribuer  
+
+1. **Fork** le dépôt principal.  
+2. Ajoutez votre code d’exploit dans **`./scripts/exploits/`**.  
+3. Déclarez vos VM ou conteneurs dans **`./docker/`**.  
+4. Sélectionnez un algorithme de LoadBalancing à attaquer.  
+5. Faites une analyse cyber sur les cve/vwe et exploit lié a votre cible (LB RR: CVE ...).  
+6. Trouver un scenario qui vous convient et concretisez le techniquement ; implémentez-le.  
+7. Documenter votre ou vos scenario (prérequis, étapes, résultats).  
+8. Ouvrez une **pull-request**.
+
+---
+
+#### 2. Exigences de qualité  
+
+- Tests unitaires obligatoires.  
+- Documentation exhaustive et claire.  
+- Respect des bonnes pratiques de code et de sécurité.
+
+---
+
+#### 3. Amélioration continue  
+
+Le projet doit pouvoir :  
+
+- Collecter des métriques d’exécution.  
+- Détecter les goulots d’étranglement.  
+- Optimiser les workflows.  
+- Accueillir de nouveaux scénarios facilement.  
+
+Pour cela, créez :  
+
+- Des **templates** réutilisables.  
+- Une base de connaissances des exploits.  
+- Une bibliothèque de workflows d’attaque/tests.
+
+---
+
+#### 4. Ressources et outillage  
+
+- Infrastructure
+    - Docker et Docker Compose
+    - Ansible pour le provisionnement
+    - GitLab CI pour l'automatisation
+    - Scripts d'analyse en cyber
+- Sécurité
+    - Metasploit Framework
+    - Scripts d'exploitation personnalisés
+    - Outils d'analyse automatisée
+
+---
+
 ## Votre environnement
 
 | Domaine | Composants / Outils | Rôle principal |
@@ -149,46 +210,3 @@ Pour ajouter un nouveau scénario, créez une branche git et suivez le template 
     - Date : 2025-04-20
     - Description : Test automatisé d'injections SQL à travers un load balancer
     - Fichiers : /scenarios/sql-injection-lb/
-
-## Bibliothèque d'Exploits Collaborative
-
-Les scripts et outils d'exploitation sont maintenus collectivement par l'équipe. Votre a realiser sur une cible LB sur l'algo de votre choix (least connection, ....). Pour contribuer :
-
-- Processus de contribution
-    - Forker le dépôt principal
-    - Ajouter votre exploit dans ./scripts/exploits/
-    - Choisir un algorithme de loadbalancing a exploiter
-    - Faites une analyse cyber sur les cve/vwe et exploit lié a votre cible (LB RR: CVE ...) 
-    - Trouver un scenario qui vous convient et concretisez le techniquement 
-    - Documenter votre ou vos scenario
-    - Créer une pull request
-- Standards de qualité
-    - Tests unitaires requis
-    - Documentation complète
-    - Respect des bonnes pratiques
-
-## Amélioration continue
-
-- Feedback et itération
-
-    Le système permet de :
-
-    - Collecter des métriques sur les tests
-    - Identifier les goulots d'étranglement
-    - Optimiser les workflows
-    - Intégrer de nouveaux scénarios
-- Documentation et partage
-    - Création de templates réutilisables
-    - Base de connaissances des exploits
-    - Bibliothèque de workflows
-
-## Ressources et outils
-
-- Infrastructure
-    - Docker et Docker Compose
-    - Ansible pour le provisionnement
-    - GitLab CI pour l'automatisation
-- Sécurité
-    - Metasploit Framework
-    - Scripts d'exploitation personnalisés
-    - Outils d'analyse automatisée
