@@ -34,7 +34,7 @@ Accéder à des ressources internes,
 
 Ou progresser vers une escalade de privilèges.
 
-<img src="assets/workflows.png" style="width:100%" >
+<img src="assets/scenario.png" style="width:100%" >
 
 ### Analyse
 
