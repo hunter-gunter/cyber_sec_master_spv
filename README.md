@@ -13,6 +13,21 @@ Standardiser et automatiser les tests de sécurité, tout en favorisant la colla
 
 Dans le cadre d'un audit de securité d'un composant de l'infrastructure IT d'un laboratoire ayant exposé une partie de son infrastructur sur intrnet. La cible est un loadbalancer qui est le point d'entré vers des applications web du labo. La production est simuler par une infrastructure docker dynamique et personnalisable. Linfra est specifié par un fichier "docker-compose.yml", et communique directement avec l'attaquant via l'interface "internet". Vous serez donc amenés à "auditer et identifier les failles de sécurité" présentes sur un système dont le point d’entrée principal est un Load Balancer (tel que Nginx). Vous devrez démontrer concrètement comment une vulnérabilité spécifique du load balancer peut être exploitée par un scénario d’attaque réaliste, conduisant à une perturbation de son fonctionnement et permettant une escalade progressive des privilèges. Votre travail consistera également à documenter précisément chaque étape du scénario d'escalade afin d'assurer sa reproductibilité complète. Enfin, en bonus, vous pourrez proposer une solution corrective basée uniquement sur des modifications de configuration ou de règles, sans avoir recours à une montée de version logicielle, afin de démontrer l'efficacité immédiate d'une mitigation ciblée.
 
+## Scenario
+
+Le Load Balancer, exposé directement sur le port 80 depuis Internet, fait partie intégrante du système de production.
+Depuis Internet, l'attaquant initie des requêtes, par exemple en utilisant des outils comme curl, pour envoyer de manière répétée des schémas d'attaque (workflows malveillants) visant à exploiter les failles potentielles du Load Balancer et ainsi compromettre la cible située derrière.
+
+Chaque requête est donc une tentative consciente de traverser l'infrastructure via le Load Balancer pour :
+
+Déstabiliser son comportement (par saturation, erreur de routage, etc.),
+
+Accéder à des ressources internes,
+
+Ou progresser vers une escalade de privilèges.
+
+<img src="assets/workflows.png" style="width:100%" >
+
 ## Definiton appliqué a notre context
 
 | **Mots** | **Definition** |
