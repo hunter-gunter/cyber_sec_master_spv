@@ -15,6 +15,14 @@ Dans le cadre d'un audit de securité d'un composant de l'infrastructure IT d'un
 
 ## Scenario
 
+### Production
+
+Nous avons donc mis en place un scénario reflète notre environnement de production : un serveur Nginx utilisé comme load balancer pour les réplicas de notre application. Juste à côté, un service Fail2Ban surveille en quasi temps réel les logs générés, constituant ainsi une première ligne de défense contre les menaces potentielles. [IAC Infra](./docker-compose.yml). Ici, le client représente un ensemble de bots, notre armée d'attaquants automatisés
+
+<img src="assets/infra.png" style="width:100%" >
+
+### Scenario d'attaque
+
 Le Load Balancer, exposé directement sur le port 80 depuis Internet, fait partie intégrante du système de production.
 Depuis Internet, l'attaquant initie des requêtes, par exemple en utilisant des outils comme curl, pour envoyer de manière répétée des schémas d'attaque (workflows malveillants) visant à exploiter les failles potentielles du Load Balancer et ainsi compromettre la cible située derrière.
 
@@ -28,7 +36,27 @@ Ou progresser vers une escalade de privilèges.
 
 <img src="assets/workflows.png" style="width:100%" >
 
-## Definiton appliqué a notre context
+### Analyse
+
+Dans ce projet, la mitigation vise à renforcer la résistance du Load Balancer en introduisant des mécanismes de limitation du trafic et de filtrage léger directement au niveau de l'entrée réseau. Cette approche permet d'absorber ou de neutraliser une partie des attaques automatiques (bots, flood HTTP, bruteforce) sans toucher aux applications internes ni modifier l'architecture existante. Cela répond à des contraintes réelles où il n'est pas possible de monter en version ni de redéployer toute l'infrastructure. L'objectif est de garantir la continuité de service en réduisant l'impact des attaques tout en maintenant l'intégrité de l'environnement de production.
+
+<br />
+
+| Scénario | Sans mitigation | Avec mitigation appliquée |
+| --- | --- | --- |
+| Détection d'une attaque | 10-15 min (analyse des logs après saturation) | Instantané (logs d'erreurs bloqués par mitigation) |
+| Analyse d'incident | 2-3 h pour tout comprendre | 20-30 min max |
+| Remédiation d'urgence (scaling, reboot containers) | 1-2 h (downtime partiel possible) | Négligeable (service continue de tourner) |
+| Risque de surcharge load balancer | Élevé (interruption possible) | Très faible |
+
+<br />
+
+En conclusion, la mitigation appliquée permet de réduire de 90 % le temps de détection d'une attaque et de diviser par 6 le temps nécessaire à l'analyse d'un incident, tout en rendant la remédiation quasi instantanée. Là où une attaque pouvait provoquer jusqu’à 2 à 3 heures de perturbations sans protection, la mise en place de mécanismes de limitation et de filtrage léger ramène ce risque à moins de 30 minutes d'impact potentiel. Cette approche ciblée, agissant directement sur le point d'entrée du Load Balancer sans toucher à l'infrastructure interne, offre ainsi une solution efficace pour maintenir la continuité de service dans des environnements contraints, tout en augmentant significativement la résilience globale de la production.
+<br />
+
+### Definiton appliqué a notre context
+
+<br />
 
 | **Mots** | **Definition** |
 | --- | --- |
@@ -41,12 +69,11 @@ Ou progresser vers une escalade de privilèges.
 | firewall | outils permettant de banir une ip |
 | datavisualtion | outils permettant d'identifier un comportement suspect |
 
+<br />
 
-## Introduction 
+## Introduction : conception de l'environnement IaC
 
 Cette section avancée vise à apprendre aux experts en cybersécurité à évaluer rapidement un environnement **Docker** avec **équilibrage de charge** du point de vue de la sécurité. Il s’agit d’identifier et documenter les vulnérabilités de l’infrastructure, d’associer les failles à des références (CVE, CWE) et de mettre en pratique des exploits connus. L’objectif est de démontrer la capacité à réaliser une **analyse de vulnérabilités** rapide et efficace, en utilisant des outils de pentest (ex: **Nmap**, **Metasploit**, etc.) et en s’appuyant sur des cas concrets. 
-
-## Conception de l'environnement IaC
 
 ### Load Balancer
 
@@ -64,11 +91,6 @@ En informatique, la répartition de charge (en anglais : load balancing) désign
 
 <p style="width:100%;text-align: center"><a href="./nginx/Readme.md">Voir des examples de configuration</a></p>
 
-### Lab: scenario d'attaque en environement encadrer
-
-Nous avons donc mis en place un scénario reflète notre environnement de production : un serveur Nginx utilisé comme load balancer pour les réplicas de notre application. Juste à côté, un service Fail2Ban surveille en quasi temps réel les logs générés, constituant ainsi une première ligne de défense contre les menaces potentielles. [IAC Infra](./docker-compose.yml)
-
-<img src="assets/infra.png" style="width:100%" >
 
 ### Exploit Toolbox et scenario
 
