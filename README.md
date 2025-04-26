@@ -1,4 +1,4 @@
-# Dynamique Pentest on LB target with docker : Sécurisation et Exploitation Avancées
+# Dynamique Penteste sur une cible LoadBalancer sous docker : Sécurisation et Exploitation Avancées
 
 ## Context
 
