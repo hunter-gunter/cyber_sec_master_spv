@@ -9,6 +9,24 @@ Optimiser la productivité en cybersécurité grâce à des environnements logiq
 
 Standardiser et automatiser les tests de sécurité, tout en favorisant la collaboration : chaque expert peut ajouter ses propres workflows et partager ses bonnes pratiques via un dépôt Git commun.
 
+## Problematique
+
+Dans le cadre d'une infrastructure virtuelle mise à disposition sous Docker, accessible directement via Internet (interface docker simulant internet), vous serez amenés à auditer et identifier les failles de sécurité présentes sur un système dont le point d’entrée principal est un Load Balancer (tel que Nginx). Vous devrez démontrer concrètement comment une vulnérabilité spécifique du load balancer peut être exploitée par un scénario d’attaque réaliste, conduisant à une perturbation de son fonctionnement et permettant une escalade progressive des privilèges. Votre travail consistera également à documenter précisément chaque étape du scénario d'escalade afin d'assurer sa reproductibilité complète. Enfin, en bonus, vous pourrez proposer une solution corrective basée uniquement sur des modifications de configuration ou de règles, sans avoir recours à une montée de version logicielle, afin de démontrer l'efficacité immédiate d'une mitigation ciblée.
+
+## Definiton appliqué a notre context
+
+| **Mots** | **Definition** |
+| --- | --- |
+| mitigation | En cybersécurité, une mitigation (ou atténuation) désigne une mesure ou un ensemble d’actions prises afin de réduire l’impact ou la gravité d'une vulnérabilité ou d'une attaque informatique |
+| internet | interface docker simulant internet |
+| infra | interface docker simulant notre infrastructure sous forme de cluster docker |
+| attaquant | conteneur docker pointant vers un script d'attaque |
+| replicas | principalement definis sur l'attaquant disposant d'une plage d'ip libre permetant de simuler un grand nombre de bot ayant une addresse ip diferentes |
+| bot |  il definit le comportement de l'attaquant qui dispose de caracteristique particuliee propre a son attaque comme des headers ou des pattern similaire generalement identifier et bloquer par nos firewall |
+| firewall | outils permettant de banir une ip |
+| datavisualtion | outils permettant d'identifier un comportement suspect |
+
+
 ## Introduction 
 
 Cette section avancée vise à apprendre aux experts en cybersécurité à évaluer rapidement un environnement **Docker** avec **équilibrage de charge** du point de vue de la sécurité. Il s’agit d’identifier et documenter les vulnérabilités de l’infrastructure, d’associer les failles à des références (CVE, CWE) et de mettre en pratique des exploits connus. L’objectif est de démontrer la capacité à réaliser une **analyse de vulnérabilités** rapide et efficace, en utilisant des outils de pentest (ex: **Nmap**, **Metasploit**, etc.) et en s’appuyant sur des cas concrets. 
