@@ -54,6 +54,8 @@ Dans ce projet, la mitigation vise à renforcer la résistance du Load Balancer 
 En conclusion, la mitigation appliquée permet de réduire de 90 % le temps de détection d'une attaque et de diviser par 6 le temps nécessaire à l'analyse d'un incident, tout en rendant la remédiation quasi instantanée. Là où une attaque pouvait provoquer jusqu’à 2 à 3 heures de perturbations sans protection, la mise en place de mécanismes de limitation et de filtrage léger ramène ce risque à moins de 30 minutes d'impact potentiel. Cette approche ciblée, agissant directement sur le point d'entrée du Load Balancer sans toucher à l'infrastructure interne, offre ainsi une solution efficace pour maintenir la continuité de service dans des environnements contraints, tout en augmentant significativement la résilience globale de la production.
 <br />
 
+<img src="assets/analyse.png" style="width:100%" >
+
 ### Definiton appliqué a notre context
 
 <br />
