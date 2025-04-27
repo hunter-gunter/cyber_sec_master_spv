@@ -1,22 +1,81 @@
-# Cours Pentest Docker Dynamique : Sécurisation et Exploitation Avancées
+# Sécurisation et Exploitation Avancées : Test de penetration Dynamique sur une cible LoadBalancer via docker
+
 ## Context
-Ce module de cybersécurité se déroule dans un laboratoire Docker équipé d’un load balancer. À travers une série de scénarios d’attaque réalistes, les apprenants doivent identifier les menaces, configurer les défenses appropriées et valider leur efficacité.
+
+Ce module de cybersécurité se déroule dans un laboratoire Docker équipé d’un load balancer. À travers une série de scénarios d’attaque réalistes, les apprenants doivent identifier les menaces ou configurer les défenses appropriées et valider leur efficacité.
 L’objectif pédagogique est double :
 
 Optimiser la productivité en cybersécurité grâce à des environnements logiques, dynamiques et entièrement reproductibles (Infrastructure as Code).
 
 Standardiser et automatiser les tests de sécurité, tout en favorisant la collaboration : chaque expert peut ajouter ses propres workflows et partager ses bonnes pratiques via un dépôt Git commun.
 
-## Introduction 
+## Problematique
+
+Dans le cadre d'un audit de securité d'un composant de l'infrastructure IT d'un laboratoire ayant exposé une partie de son infrastructur sur intrnet. La cible est un loadbalancer qui est le point d'entré vers des applications web du labo. La production est simuler par une infrastructure docker dynamique et personnalisable. Linfra est specifié par un fichier "docker-compose.yml", et communique directement avec l'attaquant via l'interface "internet". Vous serez donc amenés à "auditer et identifier les failles de sécurité" présentes sur un système dont le point d’entrée principal est un Load Balancer (tel que Nginx). Vous devrez démontrer concrètement comment une vulnérabilité spécifique du load balancer peut être exploitée par un scénario d’attaque réaliste, conduisant à une perturbation de son fonctionnement et permettant une escalade progressive des privilèges. Votre travail consistera également à documenter précisément chaque étape du scénario d'escalade afin d'assurer sa reproductibilité complète. Enfin, en bonus, vous pourrez proposer une solution corrective basée uniquement sur des modifications de configuration ou de règles, sans avoir recours à une montée de version logicielle, afin de démontrer l'efficacité immédiate d'une mitigation ciblée.
+
+## Scenario
+
+### Production
+
+Nous avons donc mis en place un scénario reflète notre environnement de production : un serveur Nginx utilisé comme load balancer pour les réplicas de notre application. Juste à côté, un service Fail2Ban surveille en quasi temps réel les logs générés, constituant ainsi une première ligne de défense contre les menaces potentielles. [IAC Infra](./docker-compose.yml). Ici, le client représente un ensemble de bots, notre armée d'attaquants automatisés
+
+<img src="assets/infra.png" style="width:100%" >
+
+### Scenario d'attaque
+
+Le Load Balancer, exposé directement sur le port 80 depuis Internet, fait partie intégrante du système de production.
+Depuis Internet, l'attaquant initie des requêtes, par exemple en utilisant des outils comme curl, pour envoyer de manière répétée des schémas d'attaque (workflows malveillants) visant à exploiter les failles potentielles du Load Balancer et ainsi compromettre la cible située derrière.
+
+Chaque requête est donc une tentative consciente de traverser l'infrastructure via le Load Balancer pour :
+
+Déstabiliser son comportement (par saturation, erreur de routage, etc.),
+
+Accéder à des ressources internes,
+
+Ou progresser vers une escalade de privilèges.
+
+<img src="assets/scenario.png" style="width:100%" >
+
+### Analyse
+
+Dans ce projet, la mitigation vise à renforcer la résistance du Load Balancer en introduisant des mécanismes de limitation du trafic et de filtrage léger directement au niveau de l'entrée réseau. Cette approche permet d'absorber ou de neutraliser une partie des attaques automatiques (bots, flood HTTP, bruteforce) sans toucher aux applications internes ni modifier l'architecture existante. Cela répond à des contraintes réelles où il n'est pas possible de monter en version ni de redéployer toute l'infrastructure. L'objectif est de garantir la continuité de service en réduisant l'impact des attaques tout en maintenant l'intégrité de l'environnement de production.
+
+<br />
+
+| Scénario | Sans mitigation | Avec mitigation appliquée |
+| --- | --- | --- |
+| Détection d'une attaque | 10-15 min (analyse des logs après saturation) | Instantané (logs d'erreurs bloqués par mitigation) |
+| Analyse d'incident | 2-3 h pour tout comprendre | 20-30 min max |
+| Remédiation d'urgence (scaling, reboot containers) | 1-2 h (downtime partiel possible) | Négligeable (service continue de tourner) |
+| Risque de surcharge load balancer | Élevé (interruption possible) | Très faible |
+
+<br />
+
+En conclusion, la mitigation appliquée permet de réduire de 90 % le temps de détection d'une attaque et de diviser par 6 le temps nécessaire à l'analyse d'un incident, tout en rendant la remédiation quasi instantanée. Là où une attaque pouvait provoquer jusqu’à 2 à 3 heures de perturbations sans protection, la mise en place de mécanismes de limitation et de filtrage léger ramène ce risque à moins de 30 minutes d'impact potentiel. Cette approche ciblée, agissant directement sur le point d'entrée du Load Balancer sans toucher à l'infrastructure interne, offre ainsi une solution efficace pour maintenir la continuité de service dans des environnements contraints, tout en augmentant significativement la résilience globale de la production.
+<br />
+
+<img src="assets/analyse.png" style="width:100%" >
+
+### Definiton appliqué a notre context
+
+<br />
+
+| **Mots** | **Definition** |
+| --- | --- |
+| mitigation | En cybersécurité, une mitigation (ou atténuation) désigne une mesure ou un ensemble d’actions prises afin de réduire l’impact ou la gravité d'une vulnérabilité ou d'une attaque informatique |
+| internet | interface docker simulant internet |
+| infra | interface docker simulant notre infrastructure sous forme de cluster docker |
+| attaquant | conteneur docker pointant vers un script d'attaque |
+| replicas | principalement definis sur l'attaquant disposant d'une plage d'ip libre permetant de simuler un grand nombre de bot ayant une addresse ip diferentes |
+| bot |  il definit le comportement de l'attaquant qui dispose de caracteristique particuliee propre a son attaque comme des headers ou des pattern similaire generalement identifier et bloquer par nos firewall |
+| firewall | outils permettant de banir une ip |
+| datavisualtion | outils permettant d'identifier un comportement suspect |
+
+<br />
+
+## Introduction : conception de l'environnement IaC
+
 Cette section avancée vise à apprendre aux experts en cybersécurité à évaluer rapidement un environnement **Docker** avec **équilibrage de charge** du point de vue de la sécurité. Il s’agit d’identifier et documenter les vulnérabilités de l’infrastructure, d’associer les failles à des références (CVE, CWE) et de mettre en pratique des exploits connus. L’objectif est de démontrer la capacité à réaliser une **analyse de vulnérabilités** rapide et efficace, en utilisant des outils de pentest (ex: **Nmap**, **Metasploit**, etc.) et en s’appuyant sur des cas concrets. 
-
-# Infrastructure as Code: Environnement collaboratif pour Tests de Sécurité
-
-## Introduction
-
-L'approche Infrastructure as Code (IaC) change notre la façon dont nous conduisons les tests de sécurité. En définissant des environnements Docker reproductibles, nous créons une plateforme collaborative où chaque expert peut contribuer en ajoutant ses propres scénarios de test et workflows d'exploitation.
-
-## Conception de l'environnement IaC
 
 ### Load Balancer
 
@@ -31,36 +90,128 @@ En informatique, la répartition de charge (en anglais : load balancing) désign
 | **Least Connections** | L4 / L7 | Envoie au serveur le moins connecté | Connexions idle → "fantômes" | Moyen |
 | **Weighted Least Connections** | L4 / L7 | LC pondéré par capacité | Poids mal ajustés → biais | Moyen | 
 | **IP Hash / Consistent Hash** | L7 | Hachage IP / cookie ⇒ même nœud | Perte d'un nœud → re-hash massif, perte de session | Faible |
-| **EWMA / Dynamic-RR (HAProxy)** | L7 | Pondère selon latence récente | Réallocation automatique ; absorbe flash-crowd | Plus élevé |
 
-### Lab: scenario d'attaque en environement encadrer
+<p style="width:100%;text-align: center"><a href="./nginx/Readme.md">Voir des examples de configuration</a></p>
 
-Nous avons donc mis en place un scénario reflète notre environnement de production : un serveur Nginx utilisé comme load balancer pour les réplicas de notre application. Juste à côté, un service Fail2Ban surveille en quasi temps réel les logs générés, constituant ainsi une première ligne de défense contre les menaces potentielles. [IAC Infra](./docker-compose.yml)
 
-<img src="assets/infra.png" style="width:100%" >
+### Exploit Toolbox et scenario
 
-## Votre environnement
+Objectif : mettre en place un banc d’essai pour analyser les attaques contre les algorithmes de répartition de charge (load-balancers).
+Vous devrez démontrer au moins un exploit ciblant un LB configuré avec l’algorithme de votre choix (least-connection, round-robin, etc.).
+Utilisez de préférence des environnements d’exploitation connus et facilement reproductibles.
+La notation portera avant tout sur votre démarche méthodologique
+
+---
+
+#### 1. Comment contribuer  
+
+1. **Fork** le dépôt principal.  
+2. Ajoutez votre code d’exploit dans **`./scripts/exploits/`**.  
+3. Déclarez vos VM ou conteneurs dans **`./docker/`**.  
+4. Sélectionnez un algorithme de LoadBalancing à attaquer.  
+5. Faites une analyse cyber sur les cve/vwe et exploit lié a votre cible (LB RR: CVE ...).  
+6. Trouver un scenario qui vous convient et concretisez le techniquement ; implémentez-le.  
+7. Documenter votre ou vos scenario (prérequis, étapes, résultats).  
+8. Ouvrez une **pull-request**.
+
+---
+
+#### 2. Exigences de qualité  
+
+- Tests unitaires obligatoires.  
+- Documentation exhaustive et claire.  
+- Respect des bonnes pratiques de code et de sécurité.
+
+---
+
+#### 3. Amélioration continue  
+
+Le projet doit pouvoir :  
+
+- Collecter des métriques d’exécution.  
+- Détecter les goulots d’étranglement.  
+- Optimiser les workflows.  
+- Accueillir de nouveaux scénarios facilement.  
+
+Pour cela, créez :  
+
+- Des **templates** réutilisables.  
+- Une base de connaissances des exploits.  
+- Une bibliothèque de workflows d’attaque/tests.
+
+---
+
+#### 4. Ressources et outillage  
+
+- Infrastructure
+    - Docker et Docker Compose
+    - Ansible pour le provisionnement
+    - GitLab CI pour l'automatisation
+    - Scripts d'analyse en cyber
+- Sécurité
+    - Metasploit Framework
+    - Scripts d'exploitation personnalisés
+    - Outils d'analyse automatisée
+
+---
+
+####  Workflow
+
+Un scénario (ou workflow) d’escalade est une suite d’actions ordonnées qui font passer une cible (équipement, service, utilisateur…) 
+d’un état initial contrôlé vers un état final où vos privilèges ou vos capacités d’action ont augmenté.
+
+```bash
+(nologin) ──► exploit ──► user1
+               │
+               └─► nologin
+```
+
+---
+
+## Votre environnement de travail
 
 | Domaine | Composants / Outils | Rôle principal |
 | --- | --- | --- |
 | **Architecture de base** | **Docker Compose** | Orchestration des conteneurs et réseau interne |
 |  | **Nginx (LB)** | Répartition du trafic HTTP/HTTPS vers vos applications |
-|  | **Conteneurs is “Load Balancer Targets” with dyn conf**  | Surface d’attaque pour scénarios de pentest |
+|  | **Attacker (kali)**  | Surface d’attaque pour scénarios de pentest |
 |  | **Scripts d’automatisation** (Bash/Ansible) | Déploiement, scale |
 | **Workflows automatisés** | **Pipeline CI/CD** | Build, lint, déploiement d’environnements IaC |
 |  | **Tests de sécurité** (OWASP ZAP, Trivy, scripts custom) | Scans SAST/DAST, exploitation automatique |
-|  | **Collecte & analyse** (Prometheus, Grafana, Loki) | Agrégation logs/metrics, tableaux de bord, alertes |
+|  | **Collecte & analyse** (Prometheus, Grafana, ...) | Agrégation logs/metrics, tableaux de bord, alertes |
 
-## Attaques automatisées
+## Exemple d'attaques automatisées
 
-Exemple: les objectifs, différents selon chaque sujet, seront enrichis progressivement par les contributeurs.
+Les scénarios d'attaque devront ere documenter telquels, selon l'exploit trouver.
 
 | ID | Algorithme visé | Script (/attacks/) | Payload | Objectif | État |
 | --- | --- | --- | --- | --- | --- |
 | A-RR-01 | Round Robin | rr_flood.sh | 20 000 req/s GET /?slow=1 | Montrer qu’un seul nœud sature → erreurs 5xx | ⏳ |
 | A-WRR-02 | Weighted RR | weight_bias.sh | Ratio trafic 1:1 malgré weight 5:1 | Vérifier qu’un mauvais poids crée le déséquilibre | ⏳ |
 | A-LC-03 | Least Conn. | long_websocket.py | 500 connexions WebSocket longues | Encombrer un nœud ; observer la bascule | ⏳ |
-| A-EWMA-04 | EWMA | latency_spike.sh | Latence variable (tc qdisc) | Observer la réallocation auto vers les nœuds rapides | ⏳ |
+
+## Contribution de Scénarios de Test
+
+Cette section est enrichie progressivement par les collaborateurs du projet. Chaque nouveau scénario doit inclure :
+
+- Une description détaillée du workflow
+- Les prérequis techniques
+- Les objectifs de sécurité visés
+- Les métriques de succès
+
+<aside>
+Pour ajouter un nouveau scénario, créez un fork git et suivez le template de documentation fourni dans /docs/Scenarios.md
+
+</aside>
+
+- Exemple de contribution
+
+    Workflow : Détection d'injection SQL via proxy inversé
+
+    - Auteur : @pentester_alice
+    - Date : 2025-04-20
+    - Description : Test automatisé d'injections SQL à travers un load balancer
+    - Fichiers : /scenarios/sql-injection-lb/
 
 
 ## Identification des vulnérabilités de l’environnement 
@@ -133,68 +284,3 @@ Pour approfondir cette thématique de sécurité des conteneurs et de l’équil
 
 En synthèse, cette section avancée donnera aux apprenants une **méthodologie d’audit de sécurité** pour les infrastructures Docker avec load balancing, ainsi que les outils et références pour rester à jour sur les menaces. La combinaison de notions théoriques (CVE/CWE) et de **mises en pratique concrètes** assurera qu’à l’issue, les experts sauront identifier rapidement les points faibles d’un tel environnement et démontrer, exploits à l’appui, l’importance de les sécuriser.
 
-## Contribution de Scénarios de Test
-
-Cette section est enrichie progressivement par les collaborateurs du projet. Chaque nouveau scénario doit inclure :
-
-- Une description détaillée du workflow
-- Les prérequis techniques
-- Les objectifs de sécurité visés
-- Les métriques de succès
-
-<aside>
-Pour ajouter un nouveau scénario, créez une branche git et suivez le template de documentation fourni dans /docs/scenarios/
-
-</aside>
-
-- Exemple de contribution
-
-    Workflow : Détection d'injection SQL via proxy inversé
-
-    - Auteur : @pentester_alice
-    - Date : 2025-04-20
-    - Description : Test automatisé d'injections SQL à travers un load balancer
-    - Fichiers : /scenarios/sql-injection-lb/
-
-## Bibliothèque d'Exploits Collaborative
-
-Les scripts et outils d'exploitation sont maintenus collectivement par l'équipe. Votre a realiser sur une cible LB sur l'algo de votre choix (least connection, ....). Pour contribuer :
-
-- Processus de contribution
-    - Forker le dépôt principal
-    - Ajouter votre exploit dans ./scripts/exploits/
-    - Choisir un algorithme de loadbalancing a exploiter
-    - Faites une analyse cyber sur les cve/vwe et exploit lié a votre cible (LB RR: CVE ...) 
-    - Trouver un scenario qui vous convient et concretisez le techniquement 
-    - Documenter votre ou vos scenario
-    - Créer une pull request
-- Standards de qualité
-    - Tests unitaires requis
-    - Documentation complète
-    - Respect des bonnes pratiques
-
-## Amélioration continue
-
-- Feedback et itération
-
-    Le système permet de :
-
-    - Collecter des métriques sur les tests
-    - Identifier les goulots d'étranglement
-    - Optimiser les workflows
-    - Intégrer de nouveaux scénarios
-- Documentation et partage
-    - Création de templates réutilisables
-    - Base de connaissances des exploits
-    - Bibliothèque de workflows
-
-## Ressources et outils
-
-- Infrastructure
-    - Docker et Docker Compose
-    - Ansible pour le provisionnement
-    - GitLab CI pour l'automatisation
-- Sécurité
-    - Metasploit Framework
-    - Scripts d'exploitation personnalisés
-    - Outils d'analyse automatisée
