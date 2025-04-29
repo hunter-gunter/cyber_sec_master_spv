@@ -15,3 +15,6 @@ On peut redémarrer le conteneur attaquant pour redémarrer les scripts automati
 - /scripts/sys/nmap_vuln.sh     | Pour la recherche de CVE avec nmap
 - /scripts/sys/wpscan.sh        | Pour scanner les informations du Wordpress
 - /scripts/exploits/rr_flood.sh | Pour simuler une grande vague de DDoS de 20 000requêtes par secondes ce qui va déclancher Fail2Ban et bloquer l'IP pendant une durée de 60 secondes 
+
+## Scripts supplémentaires
+Il y a des scripts supplémentaires à ceux démarrés automatiquement mais ceux là ne sont que des proofs of concept pour des CVE mais ne sont pas encore fonctionnels.
