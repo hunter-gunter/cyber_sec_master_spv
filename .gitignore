@@ -2,3 +2,4 @@
 db
 #Ignorer les logs
 cyber_sec_master_spv/scripts/logs
+scripts/logs

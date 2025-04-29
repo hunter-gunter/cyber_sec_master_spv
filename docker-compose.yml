@@ -15,7 +15,7 @@ services:
     container_name: apache-waf
     restart: unless-stopped
     ports:
-      - 31337:8080
+      - 172.100.30.1:31337:8080
     environment:
       # —— Reverse‑proxy ——
       BACKEND: http://wordpressvuln
@@ -24,7 +24,7 @@ services:
       APACHE_ALWAYS_TLS_REDIRECT: off
       REQ_HEADER_FORWARDED_PROTO: http
       # —— ModSecurity tuning  ——
-      MODSEC_RULE_ENGINE: on
+      MODSEC_RULE_ENGINE: off
       BLOCKING_PARANOIA: "2"
       DETECTION_PARANOIA: "2"
       ANOMALY_INBOUND: "10"
@@ -40,7 +40,8 @@ services:
       - ./apache/modsec_audit.log:/var/log/modsec_audit.log
       - ./apache/modsec_error.log:/var/log/modsec_error.log
     networks:
-      - web
+      - infra
+      - internet
 ###############################
 ###   	   Fail2Ban   	    ###
 ###############################
@@ -66,12 +67,14 @@ services:
     #build: Dockerfile
     #ports:
     #  - "31337:80"
+    deploy:
+      replicas: 5
     environment:
       WORDPRESS_DB_PASSWORD: password
     volumes:
       - "./wp:/var/www/html:rw"
     networks:
-      - web
+      - infra
   mysql:
     image: "mysql:5.7"
     environment:
@@ -79,7 +82,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql
     networks:
-      - web
+      - infra
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     #ports:
@@ -90,7 +93,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - web
+      - infra
   wp-cli:
     image: "wordpress:cli-php7.1"
     environment:
@@ -102,7 +105,7 @@ services:
       - "./wp:/var/www/html:rw"
       - "./bin/install-wp.sh:/usr/local/bin/install-wp:ro"
     networks:
-      - web
+      - infra
 ###############################
  
 ######## HERE ATTACKER INFRA ########
@@ -111,14 +114,28 @@ services:
     build: 
       context: .
       dockerfile: ./docker/Dockerfile.attack
+    extra_hosts:
+      - "wordpress-tp.local:172.100.30.1"
     depends_on:
       - fail2ban
-    entrypoint: tail -f /dev/null
+    #command: "./scripts/sys/wpscan.sh"
+    #entrypoint: tail -f /dev/null
     networks:
-      - web
+      - internet
     volumes:
       - "./scripts:/scripts"
  
 networks:
-  web:
+  infra:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.30.0/24
+          gateway: 172.100.30.1
+
+  internet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.40.0/24
+          gateway: 172.100.40.1

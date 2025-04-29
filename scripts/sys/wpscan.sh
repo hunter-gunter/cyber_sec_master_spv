@@ -1,1 +1,1 @@
-wpscan --url http://apache-waf:8080 > /scripts/sys/logs/wpscan_result.txt
+wpscan --url http://wordpress-tp.local:31337 > /scripts/sys/logs/wpscan_result.txt

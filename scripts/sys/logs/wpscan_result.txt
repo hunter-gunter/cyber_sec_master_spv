@@ -8,9 +8,140 @@ _______________________________________________________________
 
          WordPress Security Scanner by the WPScan Team
                          Version 3.8.28
-       Sponsored by Automattic - https://automattic.com/
+                               
        @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
 _______________________________________________________________
 
+[34m[i][0m Updating the Database ...
+[34m[i][0m Update completed.
 
-Scan Aborted: The remote website is up, but does not seem to be running WordPress.
+[32m[+][0m URL: http://wordpress-tp.local:31337/ [172.100.30.1]
+[32m[+][0m Started: Tue Apr 29 14:03:43 2025
+
+Interesting Finding(s):
+
+[32m[+][0m Headers
+ | Interesting Entries:
+ |  - Server: Apache/2.4.38 (Debian)
+ |  - X-Powered-By: PHP/7.1.33
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[32m[+][0m XML-RPC seems to be enabled: http://wordpress-tp.local:31337/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner/
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access/
+
+[32m[+][0m WordPress readme found: http://wordpress-tp.local:31337/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[32m[+][0m This site has 'Must Use Plugins': http://wordpress-tp.local:31337/wp-content/mu-plugins/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 80%
+ | Reference: http://codex.wordpress.org/Must_Use_Plugins
+
+[32m[+][0m The external WP-Cron seems to be enabled: http://wordpress-tp.local:31337/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[32m[+][0m WordPress version 5.3 identified (Insecure, released on 2019-11-12).
+ | Found By: Rss Generator (Passive Detection)
+ |  - http://wordpress-tp.local:31337/?feed=rss2, <generator>https://wordpress.org/?v=5.3</generator>
+ | Confirmed By: Emoji Settings (Passive Detection)
+ |  - http://wordpress-tp.local:31337/, Match: 'wp-includes\/js\/wp-emoji-release.min.js?ver=5.3'
+
+[32m[+][0m WordPress theme in use: twentytwenty
+ | Location: http://wordpress-tp.local:31337/wp-content/themes/twentytwenty/
+ | Last Updated: 2025-04-15T00:00:00.000Z
+ | Readme: http://wordpress-tp.local:31337/wp-content/themes/twentytwenty/readme.txt
+ | [33m[!][0m The version is out of date, the latest version is 2.9
+ | Style URL: http://wordpress-tp.local:31337/wp-content/themes/twentytwenty/style.css?ver=1.0
+ | Style Name: Twenty Twenty
+ | Style URI: https://wordpress.org/themes/twentytwenty/
+ | Description: Our default theme for 2020 is designed to take full advantage of the flexibility of the block editor...
+ | Author: the WordPress team
+ | Author URI: https://wordpress.org/
+ |
+ | Found By: Css Style In Homepage (Passive Detection)
+ | Confirmed By: Css Style In 404 Page (Passive Detection)
+ |
+ | Version: 1.0 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - http://wordpress-tp.local:31337/wp-content/themes/twentytwenty/style.css?ver=1.0, Match: 'Version: 1.0'
+
+[32m[+][0m Enumerating All Plugins (via Passive Methods)
+[32m[+][0m Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[34m[i][0m Plugin(s) Identified:
+
+[32m[+][0m social-warfare
+ | Location: http://wordpress-tp.local:31337/wp-content/plugins/social-warfare/
+ | Last Updated: 2025-03-18T09:37:00.000Z
+ | [33m[!][0m The version is out of date, the latest version is 4.5.6
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By:
+ |  Urls In 404 Page (Passive Detection)
+ |  Comment (Passive Detection)
+ |
+ | Version: 3.5.2 (100% confidence)
+ | Found By: Comment (Passive Detection)
+ |  - http://wordpress-tp.local:31337/, Match: 'Social Warfare v3.5.2'
+ | Confirmed By:
+ |  Query Parameter (Passive Detection)
+ |   - http://wordpress-tp.local:31337/wp-content/plugins/social-warfare/assets/css/style.min.css?ver=3.5.2
+ |   - http://wordpress-tp.local:31337/wp-content/plugins/social-warfare/assets/js/script.min.js?ver=3.5.2
+ |  Readme - Stable Tag (Aggressive Detection)
+ |   - http://wordpress-tp.local:31337/wp-content/plugins/social-warfare/readme.txt
+ |  Readme - ChangeLog Section (Aggressive Detection)
+ |   - http://wordpress-tp.local:31337/wp-content/plugins/social-warfare/readme.txt
+
+[32m[+][0m wp-advanced-search
+ | Location: http://wordpress-tp.local:31337/wp-content/plugins/wp-advanced-search/
+ | Last Updated: 2024-11-05T18:15:00.000Z
+ | [33m[!][0m The version is out of date, the latest version is 3.3.9.3
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 3.3.3 (80% confidence)
+ | Found By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://wordpress-tp.local:31337/wp-content/plugins/wp-advanced-search/readme.txt
+
+[32m[+][0m wp-file-upload
+ | Location: http://wordpress-tp.local:31337/wp-content/plugins/wp-file-upload/
+ | Last Updated: 2025-02-15T16:43:00.000Z
+ | [33m[!][0m The version is out of date, the latest version is 4.25.3
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 4.12.2 (50% confidence)
+ | Found By: Readme - ChangeLog Section (Aggressive Detection)
+ |  - http://wordpress-tp.local:31337/wp-content/plugins/wp-file-upload/readme.txt
+
+[32m[+][0m Enumerating Config Backups (via Passive and Aggressive Methods)
+
+ Checking Config Backups -: |==================================================|
+
+[34m[i][0m No Config Backups Found.
+
+[33m[!][0m No WPScan API Token given, as a result vulnerability data has not been output.
+[33m[!][0m You can get a free API token with 25 daily requests by registering at https://wpscan.com/register
+
+[32m[+][0m Finished: Tue Apr 29 14:06:54 2025
+[32m[+][0m Requests Done: 192
+[32m[+][0m Cached Requests: 6
+[32m[+][0m Data Sent: 68.535 KB
+[32m[+][0m Data Received: 22.433 MB
+[32m[+][0m Memory used: 329.375 MB
+[32m[+][0m Elapsed time: 00:03:11
