@@ -7,7 +7,7 @@ La partie la plus intéressante est le conteneur Damn Vulnerable Wordpress fait 
 Enfin il y a le conteneur attaquant basé sur kali linux avec quelques scripts démarré automatiquement lorsque le conteneur est démarré.
 
 ## Ce qu'il faut faire pour le premier démarrage des conteneurs
-Après avoir fait la commande docker compose up -d --build il faut faire la commande "docker-compose run --rm wp-cli install-wp" afin que la wordpress soit correctement installé. Il ne devrait pas y avoir d'erreur, s'il y en a, c'est sûrement dû à des problèmes de droits sur les fichiers qu'il faut corriger (même si ce n'est pas idéal, faire un chmod 777 pour ne pas se casser la tête)
+Après avoir fait la commande `docker compose up -d --build` il faut faire la commande `docker-compose run --rm wp-cli install-wp` afin que la wordpress soit correctement installé. Il ne devrait pas y avoir d'erreur, s'il y en a, c'est sûrement dû à des problèmes de droits sur les fichiers qu'il faut corriger (même si ce n'est pas idéal, faire un `chmod 777` pour ne pas se casser la tête)
 On peut redémarrer le conteneur attaquant pour redémarrer les scripts automatisés de la kali linux
 
 ## Ce qu'il se passe lors du démarrage du conteneur Kali
